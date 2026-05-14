@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Autenticación · Gris & Blanco</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f1f3f5 0%, #e2e6ea 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 480px;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 28px;
+    padding: 40px;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: transform 0.25s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo {
+    font-size: 52px;
+    color: #5c6f87;
+    margin-bottom: 15px;
+    transition: color 0.2s;
+}
+
+.card-header h2 {
+    color: #1e2a3e;
+    font-size: 28px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+.card-header p {
+    color: #6c7a8e;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 22px;
+}
+
+.input-group i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8f9bb3;
+    font-size: 18px;
+    transition: color 0.2s;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 20px 14px 48px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 500;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
+    font-family: 'Inter', sans-serif;
+    color: #1e2a3e;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #8f9bb3;
+    box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.12);
+}
+
+.input-group input::placeholder {
+    color: #b9c2d0;
+    font-weight: 400;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #9aa6b9;
+    font-size: 18px;
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: #4a5b6e;
+}
+
+.password-strength {
+    margin-top: -8px;
+    margin-bottom: 22px;
+}
+
+.strength-bar {
+    height: 5px;
+    background: #e9edf2;
+    border-radius: 4px;
+    margin-top: 8px;
+    transition: width 0.25s ease, background-color 0.2s;
+    width: 0;
+}
+
+.strength-text {
+    font-size: 12px;
+    color: #6c7a8e;
+    display: block;
+    margin-top: 6px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    font-size: 14px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #4a5b6e;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.checkbox-label input {
+    accent-color: #6c7a8e;
+    width: 16px;
+    height: 16px;
+}
+
+.forgot-link {
+    color: #5c6f87;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: #2c3e50;
+    text-decoration: underline;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: #5a6c7e;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.2px;
+}
+
+.btn-primary i {
+    font-size: 16px;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #4a5b6e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(74, 91, 110, 0.2);
+}
+
+.btn-secondary {
+    width: 100%;
+    padding: 12px;
+    background: #ffffff;
+    color: #5c6f87;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-secondary:hover {
+    background: #f8fafc;
+    color: #3e4e62;
+    border-color: #cbd5e1;
+}
+
+.footer-note {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: #6c7a8e;
+}
+
+.footer-note a {
+    color: #5c6f87;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.footer-note a:hover {
+    color: #2c3e50;
+    text-decoration: underline;
+}
+
+/* Notificaciones en escala de grises */
+.notification {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    padding: 14px 20px;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.12);
+    transform: translateX(420px);
+    transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    z-index: 1000;
+    max-width: 360px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    backdrop-filter: blur(2px);
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    border-left: 4px solid #5f7f6e;
+    color: #2c3e2f;
+}
+
+.notification.error {
+    border-left: 4px solid #8b6b6b;
+    color: #4a3b3b;
+}
+
+.notification i {
+    font-size: 18px;
+}
+
+.notification.success i {
+    color: #5f7f6e;
+}
+
+.notification.error i {
+    color: #8b6b6b;
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 32px 20px;
+    }
+    .notification {
+        left: 20px;
+        right: 20px;
+        max-width: calc(100% - 40px);
+    }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <!-- Tarjeta de Registro (gris/blanco) -->
+    <div id="registerCard" class="card">
+        <div class="card-header">
+            <i class="fas fa-user-plus logo"></i>
+            <h2>Crear cuenta</h2>
+            <p>Regístrate en segundos</p>
+        </div>
+        <form id="registerForm">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="regName" placeholder="Nombre completo" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="regEmail" placeholder="Correo electrónico" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="regPassword" placeholder="Contraseña" required>
+                <i class="fas fa-eye toggle-password" data-target="regPassword"></i>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-check-circle"></i>
+                <input type="password" id="regConfirm" placeholder="Confirmar contraseña" required>
+                <i class="fas fa-eye toggle-password" data-target="regConfirm"></i>
+            </div>
+            <div class="password-strength">
+                <div class="strength-bar" id="strengthBar"></div>
+                <small class="strength-text" id="strengthText"></small>
+            </div>
+            <button type="submit" class="btn-primary"><i class="fas fa-user-check"></i> Registrarse</button>
+        </form>
+        <div class="footer-note">
+            ¿Ya tienes una cuenta? <a href="#" id="showLoginFromReg">Inicia sesión aquí</a>
+        </div>
+    </div>
+
+    <!-- Tarjeta de Login (gris/blanco) -->
+    <div id="loginCard" class="card" style="display: none;">
+        <div class="card-header">
+            <i class="fas fa-lock logo"></i>
+            <h2>Iniciar Sesión</h2>
+            <p>Bienvenido de vuelta</p>
+        </div>
+        <form id="loginForm">
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="loginEmail" placeholder="Correo electrónico" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="loginPassword" placeholder="Contraseña" required>
+                <i class="fas fa-eye toggle-password" data-target="loginPassword"></i>
+            </div>
+            <div class="form-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="rememberMe"> Recordarme
+                </label>
+                <a href="#" id="showRecoveryFromLogin" class="forgot-link">¿Olvidaste tu contraseña?</a>
+            </div>
+            <button type="submit" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</button>
+        </form>
+        <div class="footer-note">
+            ¿No tienes una cuenta? <a href="#" id="showRegisterFromLogin">Regístrate aquí</a>
+        </div>
+    </div>
+
+    <!-- Tarjeta de Recuperación (gris/blanco) -->
+    <div id="recoveryCard" class="card" style="display: none;">
+        <div class="card-header">
+            <i class="fas fa-key logo"></i>
+            <h2>Recuperar acceso</h2>
+            <p>Te enviaremos un enlace para restablecer tu contraseña</p>
+        </div>
+        <form id="recoveryForm">
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="recoveryEmail" placeholder="correo@ejemplo.com" required>
+            </div>
+            <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Enviar instrucciones</button>
+            <button type="button" id="backToLoginFromRecovery" class="btn-secondary"><i class="fas fa-arrow-left"></i> Volver al inicio</button>
+        </form>
+        <div class="footer-note">
+            ¿Aún sin cuenta? <a href="#" id="showRegisterFromRecovery">Regístrate aquí</a>
+        </div>
+    </div>
+</div>
+
+<div id="notification" class="notification"></div>
+
+<script src="js/api.js"></script>
+<script>
+    // ---------- DOM Elements ----------
+    const registerCard = document.getElementById('registerCard');
+    const loginCard = document.getElementById('loginCard');
+    const recoveryCard = document.getElementById('recoveryCard');
+
+    const registerForm = document.getElementById('registerForm');
+    const loginForm = document.getElementById('loginForm');
+    const recoveryForm = document.getElementById('recoveryForm');
+
+    const regName = document.getElementById('regName');
+    const regEmail = document.getElementById('regEmail');
+    const regPassword = document.getElementById('regPassword');
+    const regConfirm = document.getElementById('regConfirm');
+    const strengthBar = document.getElementById('strengthBar');
+    const strengthText = document.getElementById('strengthText');
+
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    const rememberMe = document.getElementById('rememberMe');
+
+    const recoveryEmail = document.getElementById('recoveryEmail');
+
+    const notification = document.getElementById('notification');
+
+    // ---------- Helpers UI ----------
+    function showCard(cardId) {
+        registerCard.style.display = 'none';
+        loginCard.style.display = 'none';
+        recoveryCard.style.display = 'none';
+        if (cardId === 'register') registerCard.style.display = 'block';
+        else if (cardId === 'login') loginCard.style.display = 'block';
+        else if (cardId === 'recovery') recoveryCard.style.display = 'block';
+    }
+
+    function showNotification(msg, type) {
+        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+        notification.innerHTML = '<i class="fas ' + icon + '"></i> ' + msg;
+        notification.className = 'notification show ' + type;
+        setTimeout(function() { notification.classList.remove('show'); }, 4200);
+    }
+
+    // ---------- Password Strength ----------
+    function checkStrength(pwd) {
+        var strength = 0;
+        if (pwd.length >= 8) strength++;
+        if (/[a-z]/.test(pwd)) strength++;
+        if (/[A-Z]/.test(pwd)) strength++;
+        if (/[0-9]/.test(pwd)) strength++;
+        if (/[$@#&!]/.test(pwd)) strength++;
+
+        var width = (strength / 5) * 100;
+        var color, text;
+
+        switch (strength) {
+            case 0: color = '#d1d9e8'; text = 'Muy débil'; break;
+            case 1: color = '#b7c2d4'; text = 'Débil'; break;
+            case 2: color = '#8f9bb3'; text = 'Regular'; break;
+            case 3: color = '#6c7a8e'; text = 'Fuerte'; break;
+            case 4: color = '#4a5b6e'; text = 'Muy fuerte'; break;
+            case 5: color = '#2c3e50'; text = 'Excelente'; break;
+            default: color = '#e2e8f0'; text = '';
+        }
+
+        if (pwd.length === 0) {
+            strengthBar.style.width = '0%';
+            strengthText.textContent = '';
+            return;
+        }
+
+        strengthBar.style.width = width + '%';
+        strengthBar.style.backgroundColor = color;
+        strengthText.textContent = text;
+        strengthText.style.color = '#4a5b6e';
+    }
+
+    regPassword.addEventListener('input', function(e) { checkStrength(e.target.value); });
+
+    // Toggle password
+    document.querySelectorAll('.toggle-password').forEach(function(icon) {
+        icon.addEventListener('click', function() {
+            var targetId = this.getAttribute('data-target');
+            var targetInput = document.getElementById(targetId);
+            if (targetInput) {
+                targetInput.type = targetInput.type === 'password' ? 'text' : 'password';
+                this.classList.toggle('fa-eye-slash');
+            }
+        });
+    });
+
+    // ---------- Registro (API) ----------
+    registerForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var name = regName.value.trim();
+        var email = regEmail.value.trim();
+        var password = regPassword.value;
+        var confirm = regConfirm.value;
+
+        if (!name) { showNotification('Ingresa tu nombre completo', 'error'); return; }
+        if (!/^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email)) { showNotification('Correo electrónico inválido', 'error'); return; }
+        if (password.length < 6) { showNotification('La contraseña debe tener al menos 6 caracteres', 'error'); return; }
+        if (password !== confirm) { showNotification('Las contraseñas no coinciden', 'error'); return; }
+
+        API.register(name, email, password).then(function(res) {
+            if (res.success) {
+                showNotification('Registro exitoso. ¡Ahora inicia sesión!', 'success');
+                registerForm.reset();
+                strengthBar.style.width = '0';
+                strengthText.textContent = '';
+                showCard('login');
+            } else {
+                showNotification(res.message, 'error');
+            }
+        }).catch(function() {
+            showNotification('Error de conexión con el servidor', 'error');
+        });
+    });
+
+    // ---------- Login (API) ----------
+    var rememberedEmail = localStorage.getItem('rememberedEmail');
+    if (rememberedEmail) {
+        loginEmail.value = rememberedEmail;
+        rememberMe.checked = true;
+    }
+
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var email = loginEmail.value.trim();
+        var password = loginPassword.value;
+
+        if (!email || !password) { showNotification('Completa todos los campos', 'error'); return; }
+
+        API.login(email, password).then(function(res) {
+            if (res.success) {
+                if (rememberMe.checked) {
+                    localStorage.setItem('rememberedEmail', email);
+                } else {
+                    localStorage.removeItem('rememberedEmail');
+                }
+                Session.set({ nombre: res.user.nombre, email: res.user.email, id: res.user.id });
+                window.location.href = 'shop.html';
+            } else {
+                showNotification(res.message, 'error');
+            }
+        }).catch(function() {
+            showNotification('Error de conexión con el servidor', 'error');
+        });
+    });
+
+    // ---------- Recuperación (API) ----------
+    recoveryForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var email = recoveryEmail.value.trim();
+        if (!email || !/^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email)) {
+            showNotification('Ingresa un correo válido', 'error');
+            return;
+        }
+
+        API.recovery(email).then(function(res) {
+            if (res.success) {
+                showNotification('Instrucciones enviadas a ' + email + '. Revisa tu bandeja.', 'success');
+                recoveryEmail.value = '';
+            } else {
+                showNotification(res.message, 'error');
+            }
+        }).catch(function() {
+            showNotification('Error de conexión con el servidor', 'error');
+        });
+    });
+
+    // ---------- Navegación entre tarjetas ----------
+    document.getElementById('showLoginFromReg').addEventListener('click', function(e) { e.preventDefault(); showCard('login'); });
+    document.getElementById('showRegisterFromLogin').addEventListener('click', function(e) { e.preventDefault(); showCard('register'); });
+    document.getElementById('showRecoveryFromLogin').addEventListener('click', function(e) { e.preventDefault(); showCard('recovery'); });
+    document.getElementById('backToLoginFromRecovery').addEventListener('click', function() { showCard('login'); });
+    document.getElementById('showRegisterFromRecovery').addEventListener('click', function(e) { e.preventDefault(); showCard('register'); });
+
+    showCard('login');
+</script>
+</body>
+</html>

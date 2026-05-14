@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>Calidad el paisa - Pago y métodos de pago</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Muebles, pago, métodos de pago, Calidad el paisa" name="keywords">
+    <meta content="Finaliza tu compra con los métodos de pago seguros de Calidad el paisa" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .payment-section {
+            padding: 3rem 0;
+        }
+        .payment-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: none;
+        }
+        .payment-header {
+            background: #2c2c2c;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-bottom: 3px solid #f4b400;
+        }
+        .payment-header h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+        .payment-body {
+            padding: 1.8rem;
+        }
+        .order-summary {
+            background: #fef9e6;
+            border-left: 4px solid #f4b400;
+        }
+        .product-mini {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.8rem;
+        }
+        .product-mini-img {
+            width: 60px;
+            height: 60px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            background-color: #e9ecef;
+        }
+        .product-mini-details {
+            flex: 1;
+        }
+        .product-mini-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .total-amount {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #f4b400;
+            text-align: right;
+        }
+        .method-option {
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+        .method-option:hover {
+            border-color: #f4b400;
+            background: #fffaf0;
+        }
+        .method-option.active {
+            border-color: #f4b400;
+            background: #fff6e5;
+            box-shadow: 0 0 0 2px rgba(244,180,0,0.2);
+        }
+        .method-icon {
+            font-size: 1.8rem;
+            margin-right: 15px;
+            color: #f4b400;
+            vertical-align: middle;
+        }
+        .btn-pagar {
+            background: #f4b400;
+            color: #2c2c2c;
+            font-weight: bold;
+            padding: 12px 25px;
+            border-radius: 40px;
+            border: none;
+            width: 100%;
+            font-size: 1.2rem;
+            transition: 0.2s;
+        }
+        .btn-pagar:hover {
+            background: #e0a800;
+            color: #1a1a1a;
+        }
+        .form-control:focus {
+            border-color: #f4b400;
+            box-shadow: 0 0 0 0.2rem rgba(244,180,0,0.25);
+        }
+        .text-primary-custom {
+            color: #f4b400;
+        }
+        .back-to-cart {
+            color: #f4b400;
+            text-decoration: none;
+        }
+        .back-to-cart:hover {
+            text-decoration: underline;
+            color: #d48f00;
+        }
+        footer {
+            background: #2c2c2c;
+            color: white;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            .payment-body { padding: 1.2rem; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header simplificado (similar a las páginas anteriores) -->
+    <div class="container-fluid bg-dark py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-lg-left mb-2 mb-lg-0">
+                    <div class="d-inline-flex align-items-center">
+                        <a class="text-white pr-3" href="#">FAQs</a>
+                        <span class="text-white">|</span>
+                        <a class="text-white px-3" href="#">Help</a>
+                        <span class="text-white">|</span>
+                        <a class="text-white pl-3" href="#">Support</a>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center text-lg-right">
+                    <div class="d-inline-flex align-items-center">
+                        <a class="text-white px-3" href="https://www.facebook.com/people/Muebles-y-colchones-Calidad-el-Paisa/100066455125406/"><i class="fab fa-facebook-f"></i></a>
+                        <a class="text-white px-3" href="javascript:void(0);"><i class="fab fa-whatsapp"></i></a>
+                        <a class="text-white px-3" href="https://www.instagram.com/calidadelpaisa/"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid position-relative nav-bar p-0">
+        <div class="container position-relative" style="z-index: 9;">
+            <nav class="navbar navbar-expand-lg bg-secondary navbar-dark py-3 py-lg-0 pl-3 pl-lg-5">
+                <a href="index.html" class="navbar-brand">
+                    <h1 class="m-0 display-5 text-white"><span class="text-primary"></span>Calidad el paisa</h1>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
+                    <div class="navbar-nav ml-auto py-0">
+                        <a href="shop.html" class="nav-item nav-link">Inicio</a>
+                        <a href="#" class="nav-item nav-link" id="cartNavBtn">Carrito</a>
+                        <a href="#" class="nav-item nav-link">Servicio</a>
+                        <a href="#" class="nav-item nav-link">Proyecto</a>
+                        <a href="contact.html" class="nav-item nav-link">Contacto</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container payment-section">
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="payment-card">
+                    <div class="payment-header">
+                        <h4><i class="fas fa-credit-card mr-2"></i> Datos de envío</h4>
+                    </div>
+                    <div class="payment-body">
+                        <form id="shippingForm">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Nombre completo</label>
+                                    <input type="text" class="form-control" id="fullName" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Teléfono</label>
+                                    <input type="tel" class="form-control" id="phone" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Dirección de entrega</label>
+                                <input type="text" class="form-control" id="address" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label>Ciudad</label>
+                                    <input type="text" class="form-control" id="city" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Departamento</label>
+                                    <input type="text" class="form-control" id="state" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Código postal (opcional)</label>
+                                    <input type="text" class="form-control" id="zip">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="payment-card mt-4">
+                    <div class="payment-header">
+                        <h4><i class="fas fa-money-bill-wave mr-2"></i> Métodos de pago</h4>
+                    </div>
+                    <div class="payment-body">
+                        <div class="method-option" data-method="tarjeta">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-credit-card method-icon"></i>
+                                <div>
+                                    <strong>Tarjeta de crédito/débito</strong><br>
+                                    <small class="text-muted">Visa, Mastercard, American Express</small>
+                                </div>
+                                <div class="ml-auto"><i class="fas fa-check-circle text-success" style="display: none;"></i></div>
+                            </div>
+                            <!-- Campos adicionales para tarjeta (ocultos inicialmente) -->
+                            <div class="card-fields mt-3" style="display: none;">
+                                <div class="form-row">
+                                    <div class="form-group col-md-8">
+                                        <label>Número de tarjeta</label>
+                                        <input type="text" class="form-control" placeholder="1234 5678 9012 3456">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>CVV</label>
+                                        <input type="text" class="form-control" placeholder="123">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>Fecha expiración</label>
+                                        <input type="text" class="form-control" placeholder="MM/AA">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Nombre en tarjeta</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="method-option" data-method="contraentrega">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-truck method-icon"></i>
+                                <div>
+                                    <strong>Pago contraentrega</strong><br>
+                                    <small class="text-muted">Pagas en efectivo al recibir tu pedido</small>
+                                </div>
+                                <div class="ml-auto"><i class="fas fa-check-circle text-success" style="display: none;"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="method-option" data-method="transferencia">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-university method-icon"></i>
+                                <div>
+                                    <strong>Transferencia bancaria / Nequi</strong><br>
+                                    <small class="text-muted">Bancolombia, Daviplata, Nequi</small>
+                                </div>
+                                <div class="ml-auto"><i class="fas fa-check-circle text-success" style="display: none;"></i></div>
+                            </div>
+                            <div class="transfer-fields mt-3" style="display: none;">
+                                <div class="alert alert-warning small">
+                                    <i class="fas fa-info-circle"></i> Realiza la transferencia a:<br>
+                                    <strong>Cuenta de ahorros Bancolombia #123-456-789</strong><br>
+                                    <strong>Nequi: 3226953819</strong><br>
+                                    Luego envía el comprobante a calidadpaisa@gmail.com
+                                </div>
+                                <div class="form-group">
+                                    <label>Número de comprobante (opcional)</label>
+                                    <input type="text" class="form-control" placeholder="Ingresa el ID de la transacción">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="payment-card order-summary">
+                    <div class="payment-header" style="background: #f4b400; color: #2c2c2c; border-bottom-color: #2c2c2c;">
+                        <h4><i class="fas fa-shopping-cart"></i> Resumen del pedido</h4>
+                    </div>
+                    <div class="payment-body" id="orderSummaryContainer">
+                        <!-- Aquí se cargarán los productos del carrito -->
+                        <div class="text-center p-3">Cargando carrito...</div>
+                    </div>
+                    <div class="payment-footer p-3 border-top">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span id="subtotalAmount">$0</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Envío:</span>
+                            <span id="shippingCost">$0</span>
+                        </div>
+                        <div class="total-amount d-flex justify-content-between">
+                            <strong>Total a pagar:</strong>
+                            <strong id="totalPayAmount">$0</strong>
+                        </div>
+                        <hr>
+                        <button id="confirmPaymentBtn" class="btn-pagar mt-2"><i class="fas fa-lock"></i> Confirmar pago</button>
+                        <a href="shop.html" class="back-to-cart d-block text-center mt-3"><i class="fas fa-arrow-left"></i> Volver a la tienda</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="container-fluid bg-dark text-white py-5 px-sm-3 px-md-5">
+        <div class="row pt-3">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h4 class="text-primary mb-4">Contacto</h4>
+                <p><i class="fa fa-map-marker-alt mr-2"></i>Carrera 70 No. 2b-08, Cali, Colombia</p>
+                <p><i class="fa fa-phone-alt mr-2"></i>322 695 3819</p>
+                <p><i class="fa fa-envelope mr-2"></i>calidadpaisa@gmail.com</p>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h4 class="text-primary mb-4">Enlaces rápidos</h4>
+                <div class="d-flex flex-column">
+                    <a class="text-white mb-2" href="#">Inicio</a>
+                    <a class="text-white mb-2" href="#">Productos</a>
+                    <a class="text-white mb-2" href="#">Servicios</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h4 class="text-primary mb-4">Métodos seguros</h4>
+                <div class="d-flex">
+                    <i class="fab fa-cc-visa fa-2x mr-3 text-white"></i>
+                    <i class="fab fa-cc-mastercard fa-2x mr-3 text-white"></i>
+                    <i class="fab fa-cc-amex fa-2x mr-3 text-white"></i>
+                    <i class="fas fa-university fa-2x text-white"></i>
+                </div>
+            </div>
+        </div>
+        <div class="container border-top border-secondary pt-4">
+            <p class="m-0 text-center text-white">&copy; Calidad el paisa - Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+
+    <script>
+        var cart = Cart.get();
+        var selectedMethod = null;
+
+        var metodoMap = { 'tarjeta': 1, 'contraentrega': 2, 'transferencia': 3 };
+
+        function loadCart() {
+            cart = Cart.get();
+            renderOrderSummary();
+        }
+
+        function formatCOP(price) {
+            return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(price);
+        }
+
+        function renderOrderSummary() {
+            const container = document.getElementById('orderSummaryContainer');
+            if (!container) return;
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="alert alert-warning text-center">Tu carrito está vacío. <a href="shop.html">Ir a comprar</a></div>';
+                document.getElementById('subtotalAmount').innerText = formatCOP(0);
+                document.getElementById('totalPayAmount').innerText = formatCOP(0);
+                document.getElementById('confirmPaymentBtn').disabled = true;
+                return;
+            }
+            let html = '';
+            let subtotal = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                html += `
+                    <div class="product-mini">
+                        <div class="product-mini-img" style="background-image: url('${item.image}');"></div>
+                        <div class="product-mini-details">
+                            <div class="product-mini-title">${item.name}</div>
+                            <div class="small">Cantidad: ${item.quantity} x ${formatCOP(item.price)}</div>
+                        </div>
+                        <div class="font-weight-bold">${formatCOP(itemTotal)}</div>
+                    </div>
+                `;
+            });
+            html += `<div class="text-right mt-2"><strong>Subtotal: ${formatCOP(subtotal)}</strong></div>`;
+            container.innerHTML = html;
+            document.getElementById('subtotalAmount').innerText = formatCOP(subtotal);
+            // Envío gratis (podrías calcular dinámico)
+            const shipping = 0;
+            document.getElementById('shippingCost').innerText = formatCOP(shipping);
+            document.getElementById('totalPayAmount').innerText = formatCOP(subtotal + shipping);
+        }
+
+        // Selección de método de pago
+        var methodOptions = document.querySelectorAll('.method-option');
+        methodOptions.forEach(opt => {
+            opt.addEventListener('click', function(e) {
+                // Evitar que el clic en campos de tarjeta cierre
+                if (e.target.closest('.card-fields')) return;
+                if (e.target.closest('.transfer-fields')) return;
+
+                methodOptions.forEach(m => {
+                    m.classList.remove('active');
+                    const checkIcon = m.querySelector('.fa-check-circle');
+                    if (checkIcon) checkIcon.style.display = 'none';
+                    // Ocultar campos adicionales
+                    const cardFields = m.querySelector('.card-fields');
+                    const transferFields = m.querySelector('.transfer-fields');
+                    if (cardFields) cardFields.style.display = 'none';
+                    if (transferFields) transferFields.style.display = 'none';
+                });
+                this.classList.add('active');
+                const checkIcon = this.querySelector('.fa-check-circle');
+                if (checkIcon) checkIcon.style.display = 'block';
+                selectedMethod = this.dataset.method;
+                // Mostrar campos según método
+                if (selectedMethod === 'tarjeta') {
+                    const fields = this.querySelector('.card-fields');
+                    if (fields) fields.style.display = 'block';
+                } else if (selectedMethod === 'transferencia') {
+                    const fields = this.querySelector('.transfer-fields');
+                    if (fields) fields.style.display = 'block';
+                }
+            });
+        });
+
+        // Confirmar pago (API)
+        document.getElementById('confirmPaymentBtn').addEventListener('click', function() {
+            if (cart.length === 0) {
+                alert('No hay productos en el carrito. Agrega algunos antes de pagar.');
+                window.location.href = 'shop.html';
+                return;
+            }
+            var fullName = document.getElementById('fullName').value.trim();
+            var phone = document.getElementById('phone').value.trim();
+            var address = document.getElementById('address').value.trim();
+            var city = document.getElementById('city').value.trim();
+            var state = document.getElementById('state').value.trim();
+            var zip = document.getElementById('zip').value.trim();
+
+            if (!fullName || !phone || !address || !city || !state) {
+                alert('Por favor completa todos los datos de envío.');
+                return;
+            }
+            if (!selectedMethod) {
+                alert('Selecciona un método de pago.');
+                return;
+            }
+
+            var subtotal = cart.reduce(function(s, i) { return s + (i.price * i.quantity); }, 0);
+            var shipping = 0;
+            var total = subtotal + shipping;
+            var metodoId = metodoMap[selectedMethod] || 1;
+
+            var user = Session.get();
+
+            var orderData = {
+                id_usuario: user ? user.id : null,
+                nombre_cliente: fullName,
+                telefono: phone,
+                direccion_entrega: address,
+                ciudad: city,
+                departamento: state,
+                codigo_postal: zip,
+                subtotal: subtotal,
+                costo_envio: shipping,
+                total: total,
+                id_metodo_pago: metodoId,
+                items: cart
+            };
+
+            var btn = document.getElementById('confirmPaymentBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+
+            API.crearPedido(orderData).then(function(res) {
+                if (res.success) {
+                    alert('Gracias por tu compra, ' + fullName + '!\n\nPedido #' + res.pedido.id_pedido + '\nTotal: $' + total.toLocaleString('es-CO') + '\n\nEn breve recibirás un correo con los detalles.');
+                    Cart.clear();
+                    window.location.href = 'shop.html';
+                } else {
+                    alert('Error: ' + res.message);
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-lock"></i> Confirmar pago';
+                }
+            }).catch(function() {
+                alert('Error de conexión con el servidor. Intenta de nuevo.');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Confirmar pago';
+            });
+        });
+
+        // Cargar carrito al inicio
+        loadCart();
+    </script>
+</body>
+</html>
