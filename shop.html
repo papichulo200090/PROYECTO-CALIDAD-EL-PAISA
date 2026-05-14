@@ -776,7 +776,7 @@
         API.getProductos().then(res => {
             if (res.success) {
                 products = res.productos.map(p => ({
-                    id: p.id_producto,
+                    id: parseInt(p.id_producto),
                     name: p.nombre,
                     desc: p.descripcion,
                     price: p.precio,
