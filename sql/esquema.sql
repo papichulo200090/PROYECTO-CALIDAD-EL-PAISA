@@ -138,7 +138,15 @@ INSERT INTO productos (nombre, descripcion, precio, imagen_url, categoria, stock
 ('Armario 3 Cuerpos', 'Armario amplio con 3 cuerpos y espejo.', 789900, 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'armarios', 5, 0),
 ('Cómoda 6 Cajones', 'Cómoda espaciosa con 6 cajones.', 329900, 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'comodas', 10, 0),
 ('Sillón Relax', 'Sillón ergonómico con reposapiés.', 599900, 'https://images.unsplash.com/photo-1616627547584-bf28cee262db?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'sillas', 6, 1),
-('Estante Rústico', 'Estante de madera rústica con 4 niveles.', 149900, 'https://images.unsplash.com/photo-1519643381401-22c77e60520e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'estantes', 20, 0);
+('Estante Rústico', 'Estante de madera rústica con 4 niveles.', 149900, 'https://images.unsplash.com/photo-1519643381401-22c77e60520e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'estantes', 20, 0),
+('Closet 2x2', 'Closet espacioso de 2 cuerpos con acabado premium.', 1310000, 'img/closet2x2-1310000.jpeg', 'armarios', 10, 1),
+('Sala Infinity', 'Sala Infinity con diseño moderno y cojines ergonómicos.', 1850000, 'img/sala_infinity_1850000.jpeg', 'salas', 8, 1),
+('Multialacena', 'Multialacena funcional con múltiples compartimentos.', 630000, 'img/multialacena-630.jpeg', 'armarios', 12, 1),
+('Sala Tokio Escualizable', 'Sala Tokio escualizable, elegante y versátil.', 1850000, 'img/sala-tokio_escualizable_1850000.jpeg', 'salas', 5, 1),
+('Sala Begonia', 'Sala Begonia con tapizado suave y estructura reforzada.', 1850000, 'img/salabegonia_1850000.jpeg', 'salas', 6, 1),
+('Solterón Hollywood', 'Solterón Hollywood con cabecero acojinado y diseño clásico.', 550000, 'img/solteronhollywood_550000.jpeg', 'camas', 15, 1),
+('Mesa TV', 'Mesa para TV con amplio espacio para equipos y decoración.', 490000, 'img/mesaTv_490000.jpeg', 'mesas', 20, 1),
+('Tocador Reyna', 'Tocador Reyna con espejo y múltiples cajones.', 550000, 'img/tocador-reyna_550000.jpeg', 'comodas', 10, 1);
 
 -- ============================================================
 -- 8. SERVICIOS
