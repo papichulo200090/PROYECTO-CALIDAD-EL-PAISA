@@ -104,7 +104,27 @@ API.admin = {
         body: 'action=actualizar_estado_pedido&user_id=' + userId + '&id_pedido=' + pedidoId + '&estado=' + encodeURIComponent(estado)
     }).then(r => r.json()),
 
-    getUsuarios: (userId) => fetch(API_BASE + 'admin.php?action=get_usuarios&user_id=' + userId).then(r => r.json())
+    getUsuarios: (userId) => fetch(API_BASE + 'admin.php?action=get_usuarios&user_id=' + userId).then(r => r.json()),
+
+    actualizarUsuario: (userId, data) => {
+        var body = 'action=actualizar_usuario&user_id=' + userId +
+            '&id_usuario=' + data.id_usuario +
+            '&nombre=' + encodeURIComponent(data.nombre) +
+            '&email=' + encodeURIComponent(data.email) +
+            '&rol=' + encodeURIComponent(data.rol);
+        return fetch(API_BASE + 'admin.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body
+        }).then(r => r.json());
+    },
+
+    uploadImagen: (userId, file) => {
+        var formData = new FormData();
+        formData.append('imagen', file);
+        formData.append('user_id', userId);
+        return fetch(API_BASE + 'upload.php', { method: 'POST', body: formData }).then(r => r.json());
+    }
 };
 
 // Manejo de sesión (híbrido: localStorage + API)
