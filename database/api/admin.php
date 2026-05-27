@@ -159,6 +159,29 @@ if ($action === 'get_productos') {
     }
     echo json_encode(['success' => true, 'usuarios' => $usuarios]);
 
+} elseif ($action === 'actualizar_usuario') {
+    $id = (int) ($_POST['id_usuario'] ?? 0);
+    $nombre = trim($_POST['nombre'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $rol = $_POST['rol'] ?? '';
+
+    if (!$id || empty($nombre) || empty($email) || !in_array($rol, ['admin', 'cliente'])) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Datos inválidos']);
+        exit;
+    }
+
+    $stmt = $conexion->prepare("UPDATE usuarios SET nombre = ?, email = ?, rol = ? WHERE id_usuario = ?");
+    $stmt->bind_param("sssi", $nombre, $email, $rol, $id);
+
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true, 'message' => 'Usuario actualizado']);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Error al actualizar usuario']);
+    }
+    $stmt->close();
+
 } else {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Acción no válida']);
