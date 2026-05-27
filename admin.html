@@ -103,6 +103,7 @@
                                 <th>Rol</th>
                                 <th>Registro</th>
                                 <th>Último acceso</th>
+                                <th style="width:60px;">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="clientesTableBody"></tbody>
@@ -146,12 +147,44 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>URL de la imagen</label>
-                <input type="text" id="prodImagen" placeholder="https://ejemplo.com/imagen.jpg">
+                <label>Imagen</label>
+                <div class="custom-file mb-2">
+                    <input type="file" id="prodImagenFile" accept="image/jpeg,image/png,image/gif,image/webp" style="width:100%;padding:10px;border:1.5px dashed #e2e8f0;border-radius:10px;cursor:pointer;">
+                </div>
+                <small style="color:#6c757d;">O ingresa una URL manualmente:</small>
+                <input type="text" id="prodImagen" placeholder="https://ejemplo.com/imagen.jpg" style="margin-top:4px;">
+                <div id="imagenPreview" style="margin-top:8px;display:none;"><img src="" style="max-height:80px;border-radius:8px;"></div>
             </div>
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeProductModal()">Cancelar</button>
                 <button class="btn-save" onclick="saveProduct()"><i class="fas fa-save mr-1"></i> Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Cliente -->
+    <div class="admin-modal" id="clienteModal">
+        <div class="admin-modal-content">
+            <h3><i class="fas fa-user-edit mr-2"></i> Editar cliente</h3>
+            <input type="hidden" id="editClienteId">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" id="editClienteNombre">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="editClienteEmail">
+            </div>
+            <div class="form-group">
+                <label>Rol</label>
+                <select id="editClienteRol">
+                    <option value="cliente">Cliente</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeClienteModal()">Cancelar</button>
+                <button class="btn-save" onclick="saveCliente()"><i class="fas fa-save mr-1"></i> Guardar</button>
             </div>
         </div>
     </div>
@@ -271,12 +304,31 @@
             document.getElementById('prodStock').value = data ? data.stock : 0;
             document.getElementById('prodCategoria').value = data ? (data.categoria || '') : '';
             document.getElementById('prodImagen').value = data ? (data.imagen_url || '') : '';
+            document.getElementById('prodImagenFile').value = '';
+            var preview = document.getElementById('imagenPreview');
+            preview.style.display = 'none';
             document.getElementById('productModal').classList.add('open');
         }
 
         function closeProductModal() {
             document.getElementById('productModal').classList.remove('open');
         }
+
+        // Preview imagen al seleccionar archivo
+        document.getElementById('prodImagenFile').addEventListener('change', function () {
+            var preview = document.getElementById('imagenPreview');
+            var img = preview.querySelector('img');
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    img.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
 
         function saveProduct() {
             var nombre = document.getElementById('prodNombre').value.trim();
@@ -285,41 +337,57 @@
                 showAdminToast('Nombre y precio son obligatorios', 'error');
                 return;
             }
-            var data = {
-                nombre: nombre,
-                descripcion: document.getElementById('prodDescripcion').value.trim(),
-                precio: precio,
-                stock: parseInt(document.getElementById('prodStock').value) || 0,
-                categoria: document.getElementById('prodCategoria').value.trim(),
-                imagen_url: document.getElementById('prodImagen').value.trim()
-            };
+            var fileInput = document.getElementById('prodImagenFile');
+            var imagenUrl = document.getElementById('prodImagen').value.trim();
 
-            var promise;
-            if (editingId) {
-                data.id_producto = editingId;
-                promise = API.admin.actualizarProducto(adminUser.id, data);
-            } else {
-                promise = API.admin.crearProducto(adminUser.id, data);
+            function doSave(url) {
+                var data = {
+                    nombre: nombre,
+                    descripcion: document.getElementById('prodDescripcion').value.trim(),
+                    precio: precio,
+                    stock: parseInt(document.getElementById('prodStock').value) || 0,
+                    categoria: document.getElementById('prodCategoria').value.trim(),
+                    imagen_url: url || imagenUrl
+                };
+
+                var promise;
+                if (editingId) {
+                    data.id_producto = editingId;
+                    promise = API.admin.actualizarProducto(adminUser.id, data);
+                } else {
+                    promise = API.admin.crearProducto(adminUser.id, data);
+                }
+
+                promise.then(function (res) {
+                    if (res.success) {
+                        showAdminToast(editingId ? 'Producto actualizado' : 'Producto creado');
+                        closeProductModal();
+                        loadProducts();
+                        loadDashboard();
+                    } else {
+                        showAdminToast(res.message, 'error');
+                    }
+                }).catch(function () {
+                    showAdminToast('Error de conexi\u00f3n con el servidor', 'error');
+                });
             }
 
-            promise.then(function (res) {
-                if (res.success) {
-                    showAdminToast(editingId ? 'Producto actualizado' : 'Producto creado');
-                    closeProductModal();
-                    loadProducts();
-                    loadDashboard();
-                } else {
-                    showAdminToast(res.message, 'error');
-                }
-            }).catch(function () {
-                showAdminToast('Error de conexión con el servidor', 'error');
-            });
+            if (fileInput.files && fileInput.files[0]) {
+                API.admin.uploadImagen(adminUser.id, fileInput.files[0]).then(function (res) {
+                    if (res.success) doSave(res.url);
+                    else showAdminToast(res.message, 'error');
+                }).catch(function () {
+                    showAdminToast('Error al subir la imagen', 'error');
+                });
+            } else {
+                doSave(null);
+            }
         }
 
         function editProduct(id) {
             API.admin.getProductos(adminUser.id).then(function (res) {
                 if (!res.success) return;
-                var prod = res.productos.find(function (p) { return p.id_producto === id; });
+                var prod = res.productos.find(function (p) { return parseInt(p.id_producto) === id; });
                 if (prod) openProductModal(prod);
             });
         }
@@ -443,8 +511,51 @@
                         '<td>' + rolBadge + '</td>' +
                         '<td style="font-size:13px;">' + reg + '</td>' +
                         '<td style="font-size:13px;">' + acceso + '</td>' +
+                        '<td><button class="btn-admin-sm btn-edit" onclick="editCliente(' + u.id_usuario + ')"><i class="fas fa-edit"></i></button></td>' +
                     '</tr>';
                 }).join('');
+            });
+        }
+
+        function editCliente(id) {
+            API.admin.getUsuarios(adminUser.id).then(function (res) {
+                if (!res.success) return;
+                var u = res.usuarios.find(function (x) { return parseInt(x.id_usuario) === id; });
+                if (!u) return;
+                document.getElementById('editClienteId').value = u.id_usuario;
+                document.getElementById('editClienteNombre').value = u.nombre;
+                document.getElementById('editClienteEmail').value = u.email;
+                document.getElementById('editClienteRol').value = u.rol;
+                document.getElementById('clienteModal').classList.add('open');
+            });
+        }
+
+        function closeClienteModal() {
+            document.getElementById('clienteModal').classList.remove('open');
+        }
+
+        function saveCliente() {
+            var id = parseInt(document.getElementById('editClienteId').value);
+            var nombre = document.getElementById('editClienteNombre').value.trim();
+            var email = document.getElementById('editClienteEmail').value.trim();
+            var rol = document.getElementById('editClienteRol').value;
+
+            if (!nombre || !email) {
+                showAdminToast('Nombre y email son obligatorios', 'error');
+                return;
+            }
+
+            API.admin.actualizarUsuario(adminUser.id, { id_usuario: id, nombre: nombre, email: email, rol: rol }).then(function (res) {
+                if (res.success) {
+                    showAdminToast('Cliente actualizado');
+                    closeClienteModal();
+                    loadClientes();
+                    loadDashboard();
+                } else {
+                    showAdminToast(res.message, 'error');
+                }
+            }).catch(function () {
+                showAdminToast('Error de conexi\u00f3n con el servidor', 'error');
             });
         }
 
@@ -454,6 +565,9 @@
         });
         document.getElementById('pedidoModal').addEventListener('click', function (e) {
             if (e.target === this) closePedidoModal();
+        });
+        document.getElementById('clienteModal').addEventListener('click', function (e) {
+            if (e.target === this) closeClienteModal();
         });
     </script>
 </body>
