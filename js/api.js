@@ -102,7 +102,9 @@ API.admin = {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'action=actualizar_estado_pedido&user_id=' + userId + '&id_pedido=' + pedidoId + '&estado=' + encodeURIComponent(estado)
-    }).then(r => r.json())
+    }).then(r => r.json()),
+
+    getUsuarios: (userId) => fetch(API_BASE + 'admin.php?action=get_usuarios&user_id=' + userId).then(r => r.json())
 };
 
 // Manejo de sesión (híbrido: localStorage + API)

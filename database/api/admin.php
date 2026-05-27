@@ -151,6 +151,14 @@ if ($action === 'get_productos') {
     }
     $stmt->close();
 
+} elseif ($action === 'get_usuarios') {
+    $result = $conexion->query("SELECT id_usuario, nombre, email, rol, activo, ultimo_acceso, created_at FROM usuarios ORDER BY id_usuario ASC");
+    $usuarios = [];
+    while ($row = $result->fetch_assoc()) {
+        $usuarios[] = $row;
+    }
+    echo json_encode(['success' => true, 'usuarios' => $usuarios]);
+
 } else {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Acción no válida']);
