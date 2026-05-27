@@ -76,15 +76,18 @@
         var userSpan = document.querySelector('#userWelcomeSpan span');
         var loginLink = document.getElementById('loginNavLink');
         var logoutBtn = document.getElementById('logoutBtn');
+        var adminLink = document.getElementById('adminNavLink');
         if (!userSpan || !loginLink || !logoutBtn) return;
         if (user) {
             userSpan.innerText = 'Hola, ' + user.nombre.split(' ')[0];
             loginLink.style.display = 'none';
             logoutBtn.style.display = 'inline-block';
+            if (adminLink) adminLink.style.display = user.rol === 'admin' ? 'inline-block' : 'none';
         } else {
             userSpan.innerText = 'Invitado';
             loginLink.style.display = '';
             logoutBtn.style.display = 'none';
+            if (adminLink) adminLink.style.display = 'none';
         }
     };
 
