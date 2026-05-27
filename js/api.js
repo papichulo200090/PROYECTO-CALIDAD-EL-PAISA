@@ -53,6 +53,48 @@ const API = {
     }).then(r => r.json())
 };
 
+// Admin API
+API.admin = {
+    getProductos: (userId) => fetch(API_BASE + 'admin.php?action=get_productos&user_id=' + userId).then(r => r.json()),
+
+    crearProducto: (userId, data) => {
+        var body = 'action=crear_producto&user_id=' + userId +
+            '&nombre=' + encodeURIComponent(data.nombre) +
+            '&descripcion=' + encodeURIComponent(data.descripcion || '') +
+            '&precio=' + data.precio +
+            '&imagen_url=' + encodeURIComponent(data.imagen_url || '') +
+            '&categoria=' + encodeURIComponent(data.categoria || '') +
+            '&stock=' + (data.stock || 0);
+        return fetch(API_BASE + 'admin.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body
+        }).then(r => r.json());
+    },
+
+    actualizarProducto: (userId, data) => {
+        var body = 'action=actualizar_producto&user_id=' + userId +
+            '&id_producto=' + data.id_producto +
+            '&nombre=' + encodeURIComponent(data.nombre) +
+            '&descripcion=' + encodeURIComponent(data.descripcion || '') +
+            '&precio=' + data.precio +
+            '&imagen_url=' + encodeURIComponent(data.imagen_url || '') +
+            '&categoria=' + encodeURIComponent(data.categoria || '') +
+            '&stock=' + (data.stock || 0);
+        return fetch(API_BASE + 'admin.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body
+        }).then(r => r.json());
+    },
+
+    eliminarProducto: (userId, productoId) => fetch(API_BASE + 'admin.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'action=eliminar_producto&user_id=' + userId + '&id_producto=' + productoId
+    }).then(r => r.json())
+};
+
 // Manejo de sesión (híbrido: localStorage + API)
 const Session = {
     get: () => {
