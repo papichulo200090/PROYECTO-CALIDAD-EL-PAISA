@@ -92,6 +92,16 @@ API.admin = {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'action=eliminar_producto&user_id=' + userId + '&id_producto=' + productoId
+    }).then(r => r.json()),
+
+    getPedidos: (userId) => fetch(API_BASE + 'admin.php?action=get_pedidos&user_id=' + userId).then(r => r.json()),
+
+    getDetallePedido: (userId, pedidoId) => fetch(API_BASE + 'admin.php?action=get_detalle_pedido&id_pedido=' + pedidoId + '&user_id=' + userId).then(r => r.json()),
+
+    actualizarEstadoPedido: (userId, pedidoId, estado) => fetch(API_BASE + 'admin.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'action=actualizar_estado_pedido&user_id=' + userId + '&id_pedido=' + pedidoId + '&estado=' + encodeURIComponent(estado)
     }).then(r => r.json())
 };
 

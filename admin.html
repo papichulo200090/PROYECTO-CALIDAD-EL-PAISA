@@ -69,7 +69,23 @@
                 <div class="admin-header">
                     <h2><i class="fas fa-truck mr-2"></i> Pedidos</h2>
                 </div>
-                <p class="text-muted">Los pedidos de los clientes se mostrarán aquí próximamente.</p>
+                <div style="overflow-x:auto;">
+                    <table class="admin-table" id="pedidosTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cliente</th>
+                                <th>Teléfono</th>
+                                <th>Total</th>
+                                <th>Pago</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th style="width:100px;">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pedidosTableBody"></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Clientes -->
@@ -126,6 +142,21 @@
         </div>
     </div>
 
+    <!-- Modal Detalle del Pedido -->
+    <div class="admin-modal" id="pedidoModal">
+        <div class="admin-modal-content">
+            <h3><i class="fas fa-receipt mr-2"></i> Detalle del pedido <span id="pedidoModalId"></span></h3>
+            <div id="pedidoInfo" class="mb-3" style="font-size:14px;color:#495057;"></div>
+            <table class="admin-table">
+                <thead><tr><th>Producto</th><th>Precio</th><th>Cant.</th><th>Subtotal</th></tr></thead>
+                <tbody id="pedidoItemsBody"></tbody>
+            </table>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closePedidoModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
     <div id="footer-container"></div>
     <div id="cart-container"></div>
     <div class="admin-toast" id="adminToast"></div>
@@ -163,7 +194,10 @@
                 document.querySelectorAll('.admin-sidebar a[data-section]').forEach(function (l) { l.classList.remove('active'); });
                 this.classList.add('active');
                 document.querySelectorAll('.admin-section').forEach(function (s) { s.classList.remove('active'); });
-                document.getElementById('section-' + this.dataset.section).classList.add('active');
+                var section = this.dataset.section;
+                document.getElementById('section-' + section).classList.add('active');
+                if (section === 'pedidos') loadPedidos();
+                if (section === 'clientes') loadClientes();
             });
         });
 
@@ -179,6 +213,9 @@
         function loadDashboard() {
             API.admin.getProductos(adminUser.id).then(function (res) {
                 if (res.success) document.getElementById('statProductos').textContent = res.productos.length;
+            });
+            API.admin.getPedidos(adminUser.id).then(function (res) {
+                if (res.success) document.getElementById('statPedidos').textContent = res.pedidos.length;
             });
         }
 
@@ -285,9 +322,103 @@
             });
         }
 
-        // Close modal on overlay click
+        // ---------- Orders CRUD ----------
+        function loadPedidos() {
+            API.admin.getPedidos(adminUser.id).then(function (res) {
+                if (!res.success) return;
+                var tbody = document.getElementById('pedidosTableBody');
+                tbody.innerHTML = res.pedidos.map(function (p) {
+                    var estadoColors = { pendiente: '#f39c12', confirmado: '#3498db', enviado: '#9b59b6', entregado: '#27ae60', cancelado: '#e74c3c' };
+                    var badges = { pendiente: 'Pendiente', confirmado: 'Confirmado', enviado: 'Enviado', entregado: 'Entregado', cancelado: 'Cancelado' };
+                    var color = estadoColors[p.estado] || '#6c757d';
+                    var fecha = p.fecha_pedido ? p.fecha_pedido.split(' ')[0] : '-';
+                    return '<tr>' +
+                        '<td><strong>#' + p.id_pedido + '</strong></td>' +
+                        '<td>' + p.nombre_cliente + '</td>' +
+                        '<td>' + (p.telefono || '-') + '</td>' +
+                        '<td><strong>$' + Number(p.total).toLocaleString('es-CO') + '</strong></td>' +
+                        '<td>' + (p.metodo_pago || '-') + '</td>' +
+                        '<td><span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;background:' + color + '20;color:' + color + ';">' + (badges[p.estado] || p.estado) + '</span></td>' +
+                        '<td style="font-size:13px;">' + fecha + '</td>' +
+                        '<td>' +
+                            '<button class="btn-admin-sm btn-edit mr-1" onclick="openPedidoModal(' + p.id_pedido + ')" title="Ver detalle"><i class="fas fa-eye"></i></button>' +
+                            '<select onchange="actualizarEstadoPedido(' + p.id_pedido + ', this.value)" style="padding:4px 6px;border:1px solid #ddd;border-radius:6px;font-size:12px;">' +
+                                '<option value="">Estado</option>' +
+                                '<option value="pendiente">Pendiente</option>' +
+                                '<option value="confirmado">Confirmado</option>' +
+                                '<option value="enviado">Enviado</option>' +
+                                '<option value="entregado">Entregado</option>' +
+                                '<option value="cancelado">Cancelado</option>' +
+                            '</select>' +
+                        '</td>' +
+                    '</tr>';
+                }).join('');
+            });
+        }
+
+        function actualizarEstadoPedido(id, estado) {
+            if (!estado) return;
+            if (!confirm('\u00bfCambiar estado del pedido #' + id + ' a "' + estado + '"?')) return;
+            API.admin.actualizarEstadoPedido(adminUser.id, id, estado).then(function (res) {
+                if (res.success) {
+                    showAdminToast('Estado actualizado');
+                    loadPedidos();
+                    loadDashboard();
+                } else {
+                    showAdminToast(res.message, 'error');
+                }
+            }).catch(function () {
+                showAdminToast('Error de conexi\u00f3n con el servidor', 'error');
+            });
+        }
+
+        var currentPedidoId = null;
+
+        function openPedidoModal(id) {
+            currentPedidoId = id;
+            document.getElementById('pedidoModalId').textContent = '#' + id;
+            document.getElementById('pedidoInfo').innerHTML = 'Cargando...';
+            document.getElementById('pedidoItemsBody').innerHTML = '';
+            document.getElementById('pedidoModal').classList.add('open');
+
+            API.admin.getDetallePedido(adminUser.id, id).then(function (res) {
+                if (!res.success || !res.items.length) {
+                    document.getElementById('pedidoInfo').innerHTML = '<span class="text-muted">Sin productos en este pedido.</span>';
+                    return;
+                }
+                var total = 0;
+                var html = '';
+                res.items.forEach(function (item) {
+                    total += item.subtotal;
+                    html += '<tr>' +
+                        '<td>' + item.nombre_producto + '</td>' +
+                        '<td>$' + Number(item.precio_unitario).toLocaleString('es-CO') + '</td>' +
+                        '<td>' + item.cantidad + '</td>' +
+                        '<td><strong>$' + Number(item.subtotal).toLocaleString('es-CO') + '</strong></td>' +
+                    '</tr>';
+                });
+                html += '<tr style="font-weight:700;background:#f8f9fa;"><td colspan="3">Total</td><td>$' + Number(total).toLocaleString('es-CO') + '</td></tr>';
+                document.getElementById('pedidoItemsBody').innerHTML = html;
+                document.getElementById('pedidoInfo').innerHTML = '';
+            }).catch(function () {
+                document.getElementById('pedidoInfo').innerHTML = '<span style="color:#e74c3c;">Error al cargar detalle.</span>';
+            });
+        }
+
+        function closePedidoModal() {
+            document.getElementById('pedidoModal').classList.remove('open');
+        }
+
+        function loadClientes() {
+            // Próximamente
+        }
+
+        // Close modals on overlay click
         document.getElementById('productModal').addEventListener('click', function (e) {
             if (e.target === this) closeProductModal();
+        });
+        document.getElementById('pedidoModal').addEventListener('click', function (e) {
+            if (e.target === this) closePedidoModal();
         });
     </script>
 </body>

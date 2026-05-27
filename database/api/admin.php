@@ -104,6 +104,53 @@ if ($action === 'get_productos') {
     }
     $stmt->close();
 
+} elseif ($action === 'get_pedidos') {
+    $result = $conexion->query("SELECT p.id_pedido, p.nombre_cliente, p.telefono, p.total, p.estado, p.fecha_pedido, mp.nombre AS metodo_pago FROM pedidos p LEFT JOIN metodos_pago mp ON p.id_metodo_pago = mp.id_metodo ORDER BY p.fecha_pedido DESC");
+    $pedidos = [];
+    while ($row = $result->fetch_assoc()) {
+        $row['total'] = (int) $row['total'];
+        $pedidos[] = $row;
+    }
+    echo json_encode(['success' => true, 'pedidos' => $pedidos]);
+
+} elseif ($action === 'get_detalle_pedido') {
+    $id = (int) ($_GET['id_pedido'] ?? 0);
+    if (!$id) { http_response_code(400); echo json_encode(['success' => false, 'message' => 'ID inválido']); exit; }
+
+    $stmt = $conexion->prepare("SELECT dp.id_detalle, dp.nombre_producto, dp.precio_unitario, dp.cantidad, dp.subtotal FROM detalle_pedido dp WHERE dp.id_pedido = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $items = [];
+    while ($row = $result->fetch_assoc()) {
+        $row['precio_unitario'] = (int) $row['precio_unitario'];
+        $row['subtotal'] = (int) $row['subtotal'];
+        $items[] = $row;
+    }
+    $stmt->close();
+    echo json_encode(['success' => true, 'items' => $items]);
+
+} elseif ($action === 'actualizar_estado_pedido') {
+    $id = (int) ($_POST['id_pedido'] ?? 0);
+    $estado = $_POST['estado'] ?? '';
+    $estadosValidos = ['pendiente', 'confirmado', 'enviado', 'entregado', 'cancelado'];
+
+    if (!$id || !in_array($estado, $estadosValidos)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Datos inválidos']);
+        exit;
+    }
+
+    $stmt = $conexion->prepare("UPDATE pedidos SET estado = ? WHERE id_pedido = ?");
+    $stmt->bind_param("si", $estado, $id);
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true, 'message' => 'Estado actualizado']);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Error al actualizar estado']);
+    }
+    $stmt->close();
+
 } else {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Acción no válida']);
