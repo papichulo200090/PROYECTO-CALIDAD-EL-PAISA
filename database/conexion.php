@@ -5,8 +5,8 @@
  */
 
 define('DB_HOST', 'localhost');
-define('DB_USER', 'santi');
-define('DB_PASS', '1234567');
+define('DB_USER', 'root');
+define('DB_PASS', '');
 define('DB_NAME', 'proyecto_muebles');
 define('DB_CHARSET', 'utf8mb4');
 
