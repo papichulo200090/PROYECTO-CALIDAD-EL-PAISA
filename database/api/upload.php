@@ -56,7 +56,7 @@ if ($file['size'] > $maxSize) {
 
 $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
 $filename = uniqid('prod_') . '.' . $ext;
-$uploadDir = __DIR__ . '/../uploads/';
+$uploadDir = __DIR__ . '/../../uploads/';
 $destPath = $uploadDir . $filename;
 
 if (!move_uploaded_file($file['tmp_name'], $destPath)) {
