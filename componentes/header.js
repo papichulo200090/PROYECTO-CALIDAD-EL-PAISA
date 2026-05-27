@@ -22,11 +22,11 @@
         updateCartCount();
 
         var cartBtn = document.getElementById('cartNavBtn');
-        var cartSidebar = document.getElementById('cartSidebar');
-        if (cartBtn && cartSidebar) {
+        if (cartBtn) {
             cartBtn.addEventListener('click', function (e) {
                 e.preventDefault();
-                cartSidebar.classList.add('open');
+                var sidebar = document.getElementById('cartSidebar');
+                if (sidebar) sidebar.classList.add('open');
             });
         }
     }
