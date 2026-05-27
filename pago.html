@@ -149,30 +149,6 @@
 
 <body>
 
-    <!-- Header simplificado (similar a las páginas anteriores) -->
-    <div class="container-fluid bg-dark py-3">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 text-center text-lg-left mb-2 mb-lg-0">
-                    <div class="d-inline-flex align-items-center">
-                        <a class="text-white pr-3" href="#">FAQs</a>
-                        <span class="text-white">|</span>
-                        <a class="text-white px-3" href="#">Help</a>
-                        <span class="text-white">|</span>
-                        <a class="text-white pl-3" href="#">Support</a>
-                    </div>
-                </div>
-                <div class="col-md-6 text-center text-lg-right">
-                    <div class="d-inline-flex align-items-center">
-                        <a class="text-white px-3" href="https://www.facebook.com/people/Muebles-y-colchones-Calidad-el-Paisa/100066455125406/"><i class="fab fa-facebook-f"></i></a>
-                        <a class="text-white px-3" href="javascript:void(0);"><i class="fab fa-whatsapp"></i></a>
-                        <a class="text-white px-3" href="https://www.instagram.com/calidadelpaisa/"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="header-container"></div>
 
     <div class="container payment-section">
@@ -323,43 +299,14 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="container-fluid bg-dark text-white py-5 px-sm-3 px-md-5">
-        <div class="row pt-3">
-            <div class="col-lg-4 col-md-6 mb-4">
-                <h4 class="text-primary mb-4">Contacto</h4>
-                <p><i class="fa fa-map-marker-alt mr-2"></i>Carrera 70 No. 2b-08, Cali, Colombia</p>
-                <p><i class="fa fa-phone-alt mr-2"></i>322 695 3819</p>
-                <p><i class="fa fa-envelope mr-2"></i>calidadpaisa@gmail.com</p>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4">
-                <h4 class="text-primary mb-4">Enlaces rápidos</h4>
-                <div class="d-flex flex-column">
-                    <a class="text-white mb-2" href="#">Inicio</a>
-                    <a class="text-white mb-2" href="#">Productos</a>
-                    <a class="text-white mb-2" href="#">Servicios</a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4">
-                <h4 class="text-primary mb-4">Métodos seguros</h4>
-                <div class="d-flex">
-                    <i class="fab fa-cc-visa fa-2x mr-3 text-white"></i>
-                    <i class="fab fa-cc-mastercard fa-2x mr-3 text-white"></i>
-                    <i class="fab fa-cc-amex fa-2x mr-3 text-white"></i>
-                    <i class="fas fa-university fa-2x text-white"></i>
-                </div>
-            </div>
-        </div>
-        <div class="container border-top border-secondary pt-4">
-            <p class="m-0 text-center text-white">&copy; Calidad el paisa - Todos los derechos reservados.</p>
-        </div>
-    </footer>
+    <div id="footer-container"></div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="js/api.js"></script>
     <script src="componentes/header.js"></script>
     <script src="componentes/cart.js"></script>
+    <script src="componentes/footer.js"></script>
 
     <script>
         var cart = Cart.get();
