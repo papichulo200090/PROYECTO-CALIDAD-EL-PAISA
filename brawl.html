@@ -539,8 +539,8 @@ body {
                 } else {
                     localStorage.removeItem('rememberedEmail');
                 }
-                Session.set({ nombre: res.user.nombre, email: res.user.email, id: res.user.id });
-                window.location.href = 'shop.html';
+                Session.set({ nombre: res.user.nombre, email: res.user.email, id: res.user.id, rol: res.user.rol });
+                window.location.href = res.user.rol === 'admin' ? 'admin.html' : 'shop.html';
             } else {
                 showNotification(res.message, 'error');
             }

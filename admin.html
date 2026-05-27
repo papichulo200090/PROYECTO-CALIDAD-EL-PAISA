@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Panel de Administrador - Calidad el paisa</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="lib/flaticon/font/flaticon.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="componentes/cart.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="header-container"></div>
+    <div id="info-contacto-container"></div>
+
+    <div class="container-fluid py-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <i class="fas fa-shield-alt" style="font-size: 64px; color: #f4b400;"></i>
+                    <h1 class="mt-3">Panel de Administrador</h1>
+                    <p class="text-muted" id="adminWelcome"></p>
+                    <hr class="my-4" style="max-width: 300px; margin: 0 auto;">
+                    <p class="text-muted">Las funcionalidades de gestión estarán disponibles próximamente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+    <div id="cart-container"></div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/isotope/isotope.pkgd.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
+    <script src="componentes/header.js"></script>
+    <script src="componentes/info-contacto.js"></script>
+    <script src="componentes/cart.js"></script>
+    <script src="componentes/footer.js"></script>
+
+    <script>
+        document.addEventListener('headerLoaded', function () {
+            var user = Session.get();
+            if (!user || user.rol !== 'admin') {
+                window.location.href = 'shop.html';
+                return;
+            }
+            document.getElementById('adminWelcome').textContent = 'Bienvenido, ' + user.nombre.split(' ')[0];
+        });
+    </script>
+</body>
+</html>

@@ -66,7 +66,7 @@ if ($action === 'register') {
         echo json_encode([
             'success' => true,
             'message' => 'Registro exitoso',
-            'user' => ['id' => $id_usuario, 'nombre' => $nombre, 'email' => $email]
+            'user' => ['id' => $id_usuario, 'nombre' => $nombre, 'email' => $email, 'rol' => 'cliente']
         ]);
     } else {
         http_response_code(500);
@@ -86,7 +86,7 @@ elseif ($action === 'login') {
         exit;
     }
 
-    $stmt = $conexion->prepare("SELECT id_usuario, nombre, email, password_hash FROM usuarios WHERE email = ? AND activo = 1");
+    $stmt = $conexion->prepare("SELECT id_usuario, nombre, email, password_hash, rol FROM usuarios WHERE email = ? AND activo = 1");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -119,7 +119,8 @@ elseif ($action === 'login') {
         'user' => [
             'id' => $user['id_usuario'],
             'nombre' => $user['nombre'],
-            'email' => $user['email']
+            'email' => $user['email'],
+            'rol' => $user['rol']
         ]
     ]);
 }

@@ -98,6 +98,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     password_hash VARCHAR(255) NOT NULL,
     activo TINYINT(1) DEFAULT 1,
     ultimo_acceso DATETIME NULL,
+    rol ENUM('admin','cliente') NOT NULL DEFAULT 'cliente',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
